@@ -21,7 +21,7 @@ export class AuthService {
   public authStatus = computed(()=>this._authStatus())
 
 
-  constructor() { }
+  constructor() { this.checkAuthStatus().subscribe()}
 
   private setAuthentication(user:User, token:string):boolean{
     this._currentUser.set(user);
@@ -44,13 +44,13 @@ export class AuthService {
 
   }
 
-  checkToken():Observable<Boolean>{
+  checkAuthStatus():Observable<Boolean>{
     const url = `${this.baseUrl}/auth/check-token`;
     const token = localStorage.getItem('token');
 
     if(!token) return of(false);
 
-    const headers = new HttpHeaders().set('Authorization',`bearer${token}`)
+    const headers = new HttpHeaders().set('Authorization',`Bearer ${ token }`)
     return this.http.get<CheckTokenResponse>(url, {headers})
       .pipe(
         map(({token,user}) =>this.setAuthentication(user,token)),
@@ -59,5 +59,12 @@ export class AuthService {
           return of(false);
         })
       );
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    this._currentUser.set(null);
+    this._authStatus.set( AuthStatus.notAuthenticated );
+
   }
 }

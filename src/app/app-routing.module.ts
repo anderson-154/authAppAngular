@@ -4,12 +4,13 @@ import { AuthLayoutComponent } from './auth/layouts/auth-layout/auth-layout.comp
 import { LoginPageComponent } from './auth/pages/login-page/login-page.component';
 import { RegisterPageComponent } from './auth/pages/register-page/register-page.component';
 import { isAuthenticatedGuard } from './auth/guards/is-authenticated.guard';
+import { isNotAuthenticatedGuard } from './auth/guards';
 
 const routes: Routes = [
 
   {
     path:'auth',
-    //guards
+    canActivate:[isNotAuthenticatedGuard],
     loadChildren:()=> import('./auth/auth.module').then(m=>m.AuthModule),
   },
   {

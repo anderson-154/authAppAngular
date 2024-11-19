@@ -6,7 +6,11 @@ import { AuthService } from 'src/app/auth/services/auth.service';
   styleUrls: ['./dashboard-layout.component.css']
 })
 export class DashboardLayoutComponent {
-  private authServie = inject(AuthService);
+  private authService = inject(AuthService);
 
-  public user = computed(()=>this.authServie.currentUser());
+  public user = computed(()=>this.authService.currentUser());
+
+  onLogout() {
+    this.authService.logout();
+  }
 }
